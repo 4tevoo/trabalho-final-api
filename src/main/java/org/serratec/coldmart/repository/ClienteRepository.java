@@ -1,13 +1,16 @@
 package org.serratec.coldmart.repository;
 
-import com.residence.ecommerce.entity.Cliente;
+import org.serratec.coldmart.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface ClienteRepository extends JpaRepository<Cliente, UUID>{
-    Cliente findByCpf(String Cpf);
-    Cliente findByNomeCompelto(String NomeCompleto);
-    List<Cliente> findByCpfAndNomeCompletp(String Cpf, String NomeCompleto);
+@Repository
+public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
+     Optional<Cliente> findByCpf(String cpf);
+
+    List<Cliente> findByNomeCompletoContainingIgnoreCase(String nomeCompleto);
+    List<Cliente> findByCpfAndNomeCompleto(String cpf, String nomeCompleto);
 }
