@@ -1,4 +1,4 @@
-package com.residence.ecommerce.entity;
+package com.residence.ecommerce.enums;
 
 public enum FormaPagamento {
     CREDITO,

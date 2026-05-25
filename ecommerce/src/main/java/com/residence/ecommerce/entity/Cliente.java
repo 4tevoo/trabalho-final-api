@@ -1,60 +1,37 @@
 package com.residence.ecommerce.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name="tb_cliente")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String NomeCompleto;
+
+    @Column(nullable = false,unique = true)
     private String Cpf;
-    private String Telefone;
+
+    @Column(nullable = false,unique = true)
     private String Email;
-    private Endereco endereco;
 
-    public String getNomeCompleto() {
-        return NomeCompleto;
-    }
+    private String Telefone;
 
-    public void setNomeCompleto(String nomeCompleto) {
-        NomeCompleto = nomeCompleto;
-    }
-
-    public String getCpf() {
-        return Cpf;
-    }
-
-    public void setCpf(String cpf) {
-        Cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return Telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        Telefone = telefone;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public Cliente(String nomeCompleto, String cpf, String telefone, String email, Endereco endereco) {
-        NomeCompleto = nomeCompleto;
-        Cpf = cpf;
-        Telefone = telefone;
-        Email = email;
-        this.endereco = endereco;
-    }
+    // Dados que virão do ViaCEP salvos direto no Cliente
+    private String cep;
+    private String logradouro;
+    private String complemento;
+    private String bairro;
+    private String localidade;
+    private String uf;
 }
