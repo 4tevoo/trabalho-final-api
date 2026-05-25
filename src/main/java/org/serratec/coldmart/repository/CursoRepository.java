@@ -1,16 +1,16 @@
 package org.serratec.coldmart.repository;
 
-import com.residence.ecommerce.entity.Cursos;
+import org.serratec.coldmart.entity.Curso;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-public interface CursoRepository extends JpaRepository<Cursos, UUID> {
+@Repository
+public interface CursoRepository extends JpaRepository<Curso, UUID> {
+    List<Curso> findByTituloContainingIgnoreCase(String titulo);
+    List<Curso> findByCategoriaId(UUID categoriaId);
 
-    List<Cursos> findByBancoDeDados(String BancoDeDados);
-    List<Cursos> findByLogicaDeProgramação(String LogicaDeProgramação);
-
-    boolean existsByReactNotNull();
-    boolean existsByFrontEndEssencial(String frontEndEssencial);
+    boolean existsByTituloContainingIgnoreCase(String termo);
+    boolean existsByTituloAndCategoriaId(String titulo, UUID categoriaId);
 }
