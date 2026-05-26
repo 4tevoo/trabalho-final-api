@@ -3,12 +3,14 @@ package org.serratec.coldmart.service;
 import lombok.RequiredArgsConstructor;
 import org.serratec.coldmart.exceptions.NaoEncontradoException;
 import org.serratec.coldmart.exceptions.EntidadeDuplicadaException;
+import org.serratec.coldmart.exceptions.RegraNegocioException;
 import org.serratec.coldmart.model.ViaCepResponse;
 import org.serratec.coldmart.client.ViaCepClient;
 import org.serratec.coldmart.model.ClienteBuscar;
 import org.serratec.coldmart.model.ClienteCriar;
 import org.serratec.coldmart.entity.Cliente;
 import org.serratec.coldmart.repository.ClienteRepository;
+import org.serratec.coldmart.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,20 +23,21 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final PedidoRepository pedidoRepository;
     private final ViaCepClient viaCepClient;
     private final EmailService emailService;
 
     @Transactional
     public ClienteBuscar cadastrarCliente(ClienteCriar dto) {
-        List<Cliente> todosClientes = clienteRepository.findAll();
+        if (clienteRepository.findByCpf(dto.getCpf()).isPresent()) {
+            throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado.");
+        }
 
-        for (Cliente c : todosClientes) {
-            if (c.getCpf().equals(dto.getCpf())) {
-                throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado.");
-            }
-            if (c.getEmail().equalsIgnoreCase(dto.getEmail())) {
-                throw new EntidadeDuplicadaException("O E-mail " + dto.getEmail() + " já está cadastrado.");
-            }
+        boolean emailExiste = clienteRepository.findAll().stream()
+                .anyMatch(c -> c.getEmail().equalsIgnoreCase(dto.getEmail()));
+
+        if (emailExiste) {
+            throw new EntidadeDuplicadaException("O E-mail " + dto.getEmail() + " já está cadastrado.");
         }
 
         Cliente cliente = new Cliente();
@@ -51,16 +54,17 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Cliente com ID " + id + " não encontrado."));
 
-        List<Cliente> todosClientes = clienteRepository.findAll();
-        for (Cliente c : todosClientes) {
+        clienteRepository.findByCpf(dto.getCpf()).ifPresent(c -> {
             if (!c.getId().equals(id)) {
-                if (c.getCpf().equals(dto.getCpf())) {
-                    throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado em outro usuário.");
-                }
-                if (c.getEmail().equalsIgnoreCase(dto.getEmail())) {
-                    throw new EntidadeDuplicadaException("O E-mail " + dto.getEmail() + " já está cadastrado em outro usuário.");
-                }
+                throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado em outro usuário.");
             }
+        });
+
+        boolean emailExisteEmOutro = clienteRepository.findAll().stream()
+                .anyMatch(c -> !c.getId().equals(id) && c.getEmail().equalsIgnoreCase(dto.getEmail()));
+
+        if (emailExisteEmOutro) {
+            throw new EntidadeDuplicadaException("O E-mail " + dto.getEmail() + " já está cadastrado em outro usuário.");
         }
 
         preencherDadosCliente(cliente, dto);
@@ -92,5 +96,26 @@ public class ClienteService {
             cliente.setLocalidade(viaCep.localidade());
             cliente.setUf(viaCep.uf());
         }
+    }
+
+    @Transactional(readOnly = true)
+    public ClienteBuscar buscarPorId(UUID id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Cliente com ID " + id + " não encontrado."));
+        return new ClienteBuscar(cliente);
+    }
+
+    @Transactional
+    public void deletarCliente(UUID id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Cliente com ID " + id + " não encontrado."));
+
+        boolean possuiPedidos = !pedidoRepository.findByClienteId(id).isEmpty();
+
+        if (possuiPedidos) {
+            throw new RegraNegocioException("Não é possível excluir o cliente '" + cliente.getNomeCompleto() + "' porque ele possui histórico de pedidos no sistema.");
+        }
+
+        clienteRepository.delete(cliente);
     }
 }
