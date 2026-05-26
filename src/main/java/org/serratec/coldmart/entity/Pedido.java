@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class Pedido {
     private UUID id;
 
     @Column(nullable = false)
-    private Instant dataPedido;
+    private LocalDate dataPedido;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
