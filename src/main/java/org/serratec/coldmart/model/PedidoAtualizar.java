@@ -16,8 +16,7 @@ public class PedidoAtualizar {
     @NotNull(message = "O status do pagamento é obrigatório")
     @Schema(nullable = false, description = "Atualizer o status de pagamento", example = "PAGO, CANCELADO")
     private StatusPagamento status;
-
-    @NotNull(message = "A forma de pagamneto é obrigatória")
-    @Schema(nullable = false, description = "Selecione a forma de pagamento desejada", example = "CRÉDITO, DÉBITO, PIX OU BOLETO")
+    
+    @Schema(description = "Selecione a forma de pagamento desejada", example = "CRÉDITO, DÉBITO, PIX OU BOLETO")
     private FormaPagamento formaPagamento;
 }
