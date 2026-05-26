@@ -2,6 +2,7 @@ package org.serratec.coldmart.service;
 
 import lombok.RequiredArgsConstructor;
 import org.serratec.coldmart.exceptions.NaoEncontradoException;
+import org.serratec.coldmart.exceptions.RegraNegocioException;
 import org.serratec.coldmart.model.*;
 import org.serratec.coldmart.entity.*;
 import org.serratec.coldmart.enums.StatusPagamento;
@@ -65,6 +66,10 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Pedido com ID " + id + " não encontrado."));
 
+        if (dto.getStatus() != StatusPagamento.CANCELADO && dto.getFormaPagamento() == null) {
+            throw new RegraNegocioException("A forma de pagamento é obrigatória para atualizar o pedido para o status " + dto.getStatus() + ".");
+        }
+
         pedido.setStatus(dto.getStatus());
         Pedido pedidoAtualizado = pedidoRepository.save(pedido);
 
@@ -102,5 +107,13 @@ public class PedidoService {
         response.setValorTotal(valorTotal);
 
         return response;
+    }
+
+    @Transactional
+    public void deletarPedido(UUID id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Pedido com ID " + id + " não encontrado."));
+
+        throw new RegraNegocioException("Não é permitido excluir registros de pedidos do sistema. Por favor, utilize a atualização de status para CANCELADO.");
     }
 }
