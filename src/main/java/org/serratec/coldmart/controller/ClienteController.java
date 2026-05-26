@@ -1,6 +1,8 @@
 package org.serratec.coldmart.controller;
 
 import jakarta.validation.Valid;
+import org.serratec.coldmart.model.CategoriaBuscar;
+import org.serratec.coldmart.model.CategoriaCriar;
 import org.serratec.coldmart.model.ClienteBuscar;
 import org.serratec.coldmart.model.ClienteCriar;
 import org.serratec.coldmart.service.ClienteService;
@@ -34,9 +36,21 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteBuscar> buscarClientePorId(@PathVariable UUID id) {
+        ClienteBuscar cliente = clienteService.buscarPorId(id);
+        return ResponseEntity.ok(cliente);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ClienteBuscar> editarCliente(@PathVariable UUID id, @RequestBody @Valid ClienteCriar dto) {
         ClienteBuscar clienteEditado = clienteService.editarCliente(id, dto);
         return ResponseEntity.ok(clienteEditado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable UUID id) {
+        clienteService.deletarCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

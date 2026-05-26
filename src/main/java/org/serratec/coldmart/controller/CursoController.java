@@ -1,6 +1,8 @@
 package org.serratec.coldmart.controller;
 
 import jakarta.validation.Valid;
+import org.serratec.coldmart.entity.Curso;
+import org.serratec.coldmart.model.ClienteBuscar;
 import org.serratec.coldmart.model.CursoBuscar;
 import org.serratec.coldmart.model.CursoCriar;
 import org.serratec.coldmart.service.CursoService;
@@ -33,9 +35,21 @@ public class CursoController {
         return ResponseEntity.ok(cursos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CursoBuscar> buscarCursoPorId(@PathVariable UUID id) {
+        CursoBuscar curso = cursoService.buscarPorId(id);
+        return ResponseEntity.ok(curso);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CursoBuscar> editarCursos(@PathVariable UUID id, @RequestBody @Valid CursoCriar dto) {
         CursoBuscar cursoEditado = cursoService.editarCurso(id, dto);
         return ResponseEntity.ok(cursoEditado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCurso(@PathVariable UUID id) {
+        cursoService.deletarCurso(id);
+        return ResponseEntity.noContent().build();
     }
 }
