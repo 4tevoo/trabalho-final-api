@@ -1,13 +1,16 @@
 package org.serratec.coldmart.repository;
 
-import com.residence.ecommerce.entity.Pedido;
-import com.residence.ecommerce.entity.StatusPagamento;
+import org.serratec.coldmart.entity.Pedido;
+import org.serratec.coldmart.enums.StatusPagamento;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.UUID;
 
-public interface PedidoRepository {
-    List findByStatusOrderByDataPedidoDesc(StatusPagamento status, Pageable pageable); //Ordenação
-    List<Pedido> findByClienteId(Long clienteId);
+@Repository
+public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
+    List<Pedido> findByStatusOrderByDataPedidoDesc(StatusPagamento status, Pageable pageable);
 
+    List<Pedido> findByClienteId(UUID clienteId);
 }
