@@ -34,11 +34,22 @@ public class CategoriaController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaBuscar> buscarCategoriaPorId(@PathVariable UUID id) {
+        CategoriaBuscar categoria = categoriaService.buscarPorId(id);
+        return ResponseEntity.ok(categoria);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaBuscar> editarCategoria(@PathVariable UUID id, @RequestBody @Valid CategoriaCriar dto) {
         CategoriaBuscar categoriaEditada = categoriaService.editarCategoria(id, dto);
         return ResponseEntity.ok(categoriaEditada);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCategoria(@PathVariable UUID id) {
+        categoriaService.deletarCategoria(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

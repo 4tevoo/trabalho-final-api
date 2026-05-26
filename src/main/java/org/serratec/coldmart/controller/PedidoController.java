@@ -38,4 +38,10 @@ public class PedidoController {
         PedidoBuscar pedidoEditado = pedidoService.atualizarStatusPagamento(id, dto);
         return ResponseEntity.ok(pedidoEditado);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPedido(@PathVariable UUID id) {
+        pedidoService.deletarPedido(id);
+        return ResponseEntity.noContent().build();
+    }
 }
