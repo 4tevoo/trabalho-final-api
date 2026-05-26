@@ -21,6 +21,7 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaBuscar cadastrarCategoria(CategoriaCriar dto) {
+
         Categoria categoria = new Categoria();
         categoria.setNome(dto.getNome());
         categoria.setDescricao(dto.getDescricao());
