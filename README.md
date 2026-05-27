@@ -53,5 +53,3 @@ Para fazer o sistema rodar direitinho com todas as validações e integrações,
 - **PostgreSQL** (Nosso banco de dados relacional local)
 - **Lombok** (Para não precisar digitar Getters, Setters e construtores em todo arquivo)
 - **Springdoc OpenAPI (Swagger UI)** (Para gerar a documentação interativa das rotas automaticamente)
-  
----
