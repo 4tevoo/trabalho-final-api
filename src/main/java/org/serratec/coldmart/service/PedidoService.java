@@ -109,6 +109,23 @@ public class PedidoService {
         return response;
     }
 
+    @Transactional(readOnly = true)
+    public List<PedidoBuscar> listarPedidosPorCpfCliente(String cpf) {
+        Cliente cliente = clienteRepository.findByCpf(cpf.trim())
+                .orElseThrow(() -> new NaoEncontradoException("Cliente com CPF " + cpf + " não encontrado."));
+
+        List<Pedido> pedidos = pedidoRepository.findByClienteId(cliente.getId());
+
+        return pedidos.stream()
+                .map(pedido -> {
+                    double valorTotal = pedido.getItens().stream()
+                            .mapToDouble(ItemPedido::getValorVenda)
+                            .sum();
+                    return mapearParaPedidoBuscar(pedido, valorTotal);
+                })
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void deletarPedido(UUID id) {
         Pedido pedido = pedidoRepository.findById(id)
