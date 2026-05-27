@@ -35,11 +35,15 @@ O projeto utiliza o **PostgreSQL**.
 2. Caso prefira utilizar outro nome, ajuste a URL de conexão no arquivo `application.properties`:
    ```properties
    spring.datasource.url=jdbc:postgresql://localhost:5432/NOME_DO_SEU_BANCO
+   
+---
 
 ## Link do Swagger
 ```properties
 http://localhost:8080/swagger-ui/index.html
 ```
+---
+
 ## Tecnologias Utilizadas
 Para fazer o sistema rodar direitinho com todas as validações e integrações, utilizamos:
 - **Java 17 & Spring Boot 3.5.41** (Base do projeto)
@@ -49,3 +53,5 @@ Para fazer o sistema rodar direitinho com todas as validações e integrações,
 - **PostgreSQL** (Nosso banco de dados relacional local)
 - **Lombok** (Para não precisar digitar Getters, Setters e construtores em todo arquivo)
 - **Springdoc OpenAPI (Swagger UI)** (Para gerar a documentação interativa das rotas automaticamente)
+  
+---
