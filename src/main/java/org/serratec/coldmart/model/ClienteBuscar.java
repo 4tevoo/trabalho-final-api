@@ -19,7 +19,7 @@ public class ClienteBuscar {
     @Schema(description = "Nome Completo do clinete", example = "Thon Braga")
     private String nomeCompleto;
 
-    @Schema(description = "CPF do cliente", example = "12345678910")
+    @Schema(description = "CPF do cliente", example = "99155253970")
     private String cpf;
 
     @Schema(description = "E-mail do cliente", example = "thon@gmail.com")
