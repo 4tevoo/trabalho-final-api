@@ -1,5 +1,6 @@
 package org.serratec.coldmart.entity;
 
+import org.serratec.coldmart.enums.FormaPagamento;
 import org.serratec.coldmart.enums.StatusPagamento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,10 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusPagamento status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "forma_pagamento",nullable = true)
+    private FormaPagamento formaPagamento;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
