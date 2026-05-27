@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Pedido")
@@ -48,7 +49,7 @@ public class PedidoController {
     @Parameters(value = {
             @Parameter(name = "id", description = "Buscar por id do pedido")})
     @ApiResponses(value = {
-            @ApiResponse(description = "Lista de pedidos retornanda com sucesso", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoBuscar.class))),
+            @ApiResponse(description = "Lista de pedidos retornada com sucesso", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoBuscar.class))),
             @ApiResponse(description = "Dados informados inválidos", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Dados não encontrados", responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))})
@@ -56,6 +57,20 @@ public class PedidoController {
     public ResponseEntity<PedidoBuscar> buscarPedidoPorId(@PathVariable UUID id) {
         PedidoBuscar pedido = pedidoService.buscarPorId(id);
         return ResponseEntity.ok(pedido);
+    }
+
+    @Operation(summary = "Listar todos os pedidos pelo cpf do cliente")
+    @Parameters(value = {
+            @Parameter(name = "cpf", description = "Listar pelo cpf do cliente")})
+    @ApiResponses(value = {
+            @ApiResponse(description = "Lista de pedidos pelo cpf, retornada com sucesso", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoAtualizar.class))),
+            @ApiResponse(description = "Dados informados inválidos", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(description = "Dados não encontrados", responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),})
+    @GetMapping("/cliente")
+    public ResponseEntity<List<PedidoBuscar>> listarPedidosPorCpf(@RequestParam String cpf) {
+        List<PedidoBuscar> pedidos = pedidoService.listarPedidosPorCpfCliente(cpf);
+        return ResponseEntity.ok(pedidos);
     }
 
     @Operation(summary = "Atualizar status de pagamento do pedido")
