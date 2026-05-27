@@ -77,8 +77,8 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 👥 Integrantes do Grupo 6
 
-*   **Estevão Viana** - [GitHub Profile](4tevoo)
-*   **Jhonata Raibolt** - [GitHub Profile](jhonataraibolt)
-*   **Ricardo Mello** - [GitHub Profile](josemello26)
-*   **Yasmin Verissimo** - [GitHub Profile](yasmimverissimo)
-*   **Yuri Martins** - [GitHub Profile](Y-M-dev)
+*   **Estevão Viana** - [GitHub Profile](https://github.com/4tevoo)
+*   **Jhonata Raibolt** - [GitHub Profile](https://github.com/jhonataraibolt)
+*   **Ricardo Mello** - [GitHub Profile](https://github.com/josemello26)
+*   **Yasmin Verissimo** - [GitHub Profile](https://github.com/yasmimverissimo)
+*   **Yuri Martins** - [GitHub Profile](https://github.com/Y-M-dev)
