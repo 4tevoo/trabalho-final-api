@@ -14,9 +14,9 @@ import org.serratec.coldmart.enums.StatusPagamento;
 public class PedidoAtualizar {
 
     @NotNull(message = "O status do pagamento é obrigatório")
-    @Schema(nullable = false, description = "Atualizer o status de pagamento", example = "PAGO, CANCELADO")
+    @Schema(nullable = false, description = "Atualizer o status de pagamento", example = "APROVADO")
     private StatusPagamento status;
     
-    @Schema(description = "Selecione a forma de pagamento desejada", example = "CRÉDITO, DÉBITO, PIX OU BOLETO")
+    @Schema(description = "Selecione a forma de pagamento desejada", example = "CREDITO")
     private FormaPagamento formaPagamento;
 }
