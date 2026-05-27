@@ -38,8 +38,6 @@ public class PedidoService {
         pedido.setItens(new ArrayList<>());
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        double valorTotalPedido = 0.0;
-
         for (ItensPedidoCriar itemDto : dto.getItens()) {
             Curso curso = cursoRepository.findById(itemDto.getIdCurso())
                     .orElseThrow(() -> new NaoEncontradoException("Curso com ID " + itemDto.getIdCurso() + " não encontrado."));
@@ -52,13 +50,11 @@ public class PedidoService {
             item.setQuantidade(1);
             item.setDesconto(0.0);
 
-            valorTotalPedido += curso.getPreco();
-
             itensPedidosRepository.save(item);
             pedidoSalvo.getItens().add(item);
         }
 
-        return mapearParaPedidoBuscar(pedidoSalvo, valorTotalPedido);
+        return mapearParaPedidoBuscar(pedidoSalvo);
     }
 
     @Transactional
@@ -71,13 +67,11 @@ public class PedidoService {
         }
 
         pedido.setStatus(dto.getStatus());
+        pedido.setFormaPagamento(dto.getFormaPagamento());
+
         Pedido pedidoAtualizado = pedidoRepository.save(pedido);
 
-        double valorTotal = pedidoAtualizado.getItens().stream()
-                .mapToDouble(ItemPedido::getValorVenda)
-                .sum();
-
-        return mapearParaPedidoBuscar(pedidoAtualizado, valorTotal);
+        return mapearParaPedidoBuscar(pedidoAtualizado);
     }
 
     @Transactional(readOnly = true)
@@ -85,25 +79,30 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Pedido de número " + id + " não encontrado."));
 
-        double valorTotal = pedido.getItens().stream()
-                .mapToDouble(ItemPedido::getValorVenda)
-                .sum();
-
-        return mapearParaPedidoBuscar(pedido, valorTotal);
+        return mapearParaPedidoBuscar(pedido);
     }
 
-    private PedidoBuscar mapearParaPedidoBuscar(Pedido pedido, double valorTotal) {
+    private PedidoBuscar mapearParaPedidoBuscar(Pedido pedido) {
         PedidoBuscar response = new PedidoBuscar();
         response.setIdPedido(pedido.getId());
         response.setDataPedido(pedido.getDataPedido());
         response.setStatus(pedido.getStatus());
         response.setNomeCliente(pedido.getCliente().getNomeCompleto());
 
+        if (pedido.getStatus() == StatusPagamento.APROVADO) {
+            response.setFormaPagamento(pedido.getFormaPagamento());
+        } else {
+            response.setFormaPagamento(null);
+        }
+
         List<ItensPedidosBuscar> itensBuscar = pedido.getItens().stream()
                 .map(ItensPedidosBuscar::new)
                 .collect(Collectors.toList());
-
         response.setItens(itensBuscar);
+        
+        double valorTotal = pedido.getItens().stream()
+                .mapToDouble(ItemPedido::getValorVenda)
+                .sum();
         response.setValorTotal(valorTotal);
 
         return response;
@@ -117,12 +116,7 @@ public class PedidoService {
         List<Pedido> pedidos = pedidoRepository.findByClienteId(cliente.getId());
 
         return pedidos.stream()
-                .map(pedido -> {
-                    double valorTotal = pedido.getItens().stream()
-                            .mapToDouble(ItemPedido::getValorVenda)
-                            .sum();
-                    return mapearParaPedidoBuscar(pedido, valorTotal);
-                })
+                .map(this::mapearParaPedidoBuscar)
                 .collect(Collectors.toList());
     }
 
