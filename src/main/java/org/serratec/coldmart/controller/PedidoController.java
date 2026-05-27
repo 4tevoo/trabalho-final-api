@@ -63,7 +63,7 @@ public class PedidoController {
     @Parameters(value = {
             @Parameter(name = "cpf", description = "Listar pelo cpf do cliente")})
     @ApiResponses(value = {
-            @ApiResponse(description = "Lista de pedidos pelo cpf, retornada com sucesso", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoAtualizar.class))),
+            @ApiResponse(description = "Lista de pedidos pelo cpf, retornada com sucesso", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoBuscar.class))),
             @ApiResponse(description = "Dados informados inválidos", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Dados não encontrados", responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),})
