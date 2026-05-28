@@ -29,7 +29,9 @@ public class ClienteService {
 
     @Transactional
     public ClienteBuscar cadastrarCliente(ClienteCriar dto) {
-        if (clienteRepository.findByCpf(dto.getCpf()).isPresent()) {
+        String cpfLimpo = dto.getCpf().replaceAll("\\D", "");
+
+        if (clienteRepository.findByCpf(cpfLimpo).isPresent()) {
             throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado.");
         }
 
@@ -53,8 +55,9 @@ public class ClienteService {
     public ClienteBuscar editarCliente(UUID id, ClienteCriar dto) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Cliente com ID " + id + " não encontrado."));
+        String cpfLimpo = dto.getCpf().replaceAll("\\D", "");
 
-        clienteRepository.findByCpf(dto.getCpf()).ifPresent(c -> {
+        clienteRepository.findByCpf(cpfLimpo).ifPresent(c -> {
             if (!c.getId().equals(id)) {
                 throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado em outro usuário.");
             }
@@ -83,7 +86,8 @@ public class ClienteService {
 
     private void preencherDadosCliente(Cliente cliente, ClienteCriar dto) {
         cliente.setNomeCompleto(dto.getNomeCompleto());
-        cliente.setCpf(dto.getCpf());
+        cliente.setCpf(dto.getCpf().replaceAll("\\D", ""));
+
         cliente.setEmail(dto.getEmail());
         cliente.setTelefone(dto.getTelefone());
         cliente.setCep(dto.getCep());
@@ -113,7 +117,7 @@ public class ClienteService {
         boolean possuiPedidos = !pedidoRepository.findByClienteId(id).isEmpty();
 
         if (possuiPedidos) {
-            throw new RegraNegocioException("Não é possível excluir o cliente '" + cliente.getNomeCompleto() + "' porque ele possui histórico de pedidos no sistema.");
+            throw new RegraNegocioException("Não é possível excluir o cliente '" + cliente.getNomeCompleto() + "' because ele possui histórico de pedidos no sistema.");
         }
 
         clienteRepository.delete(cliente);
