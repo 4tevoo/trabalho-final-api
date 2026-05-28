@@ -20,7 +20,7 @@ public class ClienteCriar {
 
     @NotBlank(message = "O CPF é obrigatório")
     @CPF(message = "Formato de CPF inválido")
-    @Schema(nullable = false, description = "CPF do cliente (apenas dígitos)", example = "12345678910",minLength = 11, maxLength = 11)
+    @Schema(nullable = false, description = "CPF do cliente (apenas dígitos)", example = "12345678910")
     private String cpf;
 
     @NotBlank(message = "O telefone é obrigatório")

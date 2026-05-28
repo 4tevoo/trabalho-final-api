@@ -17,17 +17,27 @@ public class OpenApiConfig {
 
         Server server = new Server();
         server.setUrl("http://localhost:8080");
-        server.setDescription("Api de venda de cursos");
+        server.setDescription("Servidor Local - Venda de cursos");
 
-        Contact contact = new Contact();
-        contact.setEmail("grupo06@residente.serratec.org");
-        contact.setName("Grupo 06: Leilton Braga, Estêvão Viana, Yuri Martins, Jhonata Raibolt, José Ricardo Mello e Yasmin Veríssimo");
+        String descricao = """
+                Bem-vindo à documentação oficial da API REST do **ColdMart**, uma plataforma de venda de cursos online.
+                
+                Este sistema foi desenvolvido com foco em performance e boas práticas, permitindo o gerenciamento completo de categorias, cursos, clientes e pedidos.
+                
+                Desenvolvedores (Grupo 06):
+                * Estêvão Viana
+                * Jhonata Raibolt
+                * José Ricardo Mello
+                * Leilton Braga
+                * Yasmin Veríssimo
+                * Yuri Martins
+                
+                """;
 
         Info info = new Info()
-                .contact(contact)
-                .description("API REST")
                 .title("API do sistema ColdMart")
-                .version("1.0.0");
+                .version("1.0.0")
+                .description(descricao);
 
         return new OpenAPI().info(info).servers(List.of(server));
     }
