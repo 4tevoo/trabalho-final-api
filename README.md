@@ -64,12 +64,12 @@ Para fazer o sistema rodar direitinho com todas as validações e integrações,
 
 1. Crie um banco de dados local com o nome `ecommerce`.
 2. Caso prefira utilizar outro nome, ajuste a URL de conexão no arquivo `application.properties`:
-   ```properties
-  spring.datasource.url=jdbc:postgresql://localhost:5432/NOME_DO_SEU_BANCO
+> ```properties
+> spring.datasource.url=jdbc:postgresql://localhost:5432/NOME_DO_SEU_BANCO
 
 ---
 
-## Link do Swagger
+ ## Link do Swagger
 ```properties
 http://localhost:8080/v3/api-docs.yaml
 ```
