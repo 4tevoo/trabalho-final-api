@@ -71,7 +71,7 @@ Para fazer o sistema rodar direitinho com todas as validações e integrações,
 
 ## Link do Swagger
 ```properties
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/v3/api-docs.yaml
 ```
 ---
 
