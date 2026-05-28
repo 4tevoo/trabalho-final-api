@@ -1,9 +1,11 @@
 package org.serratec.coldmart.model;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.serratec.coldmart.enums.FormaPagamento;
 import org.serratec.coldmart.enums.StatusPagamento;
 
 import java.time.LocalDate;
@@ -21,13 +23,16 @@ public class PedidoBuscar {
     @Schema(description = "Data do pedido", example = "2026-05-25")
     private LocalDate dataPedido;
 
-    @Schema(description = "Status do pagamento do pedido", example = "PROCESSANDO")
+    @Schema(description = "Status do pagamento do pedido", example = "APROVADO")
     private StatusPagamento status;
+
+    @Schema(description = "Forma de pagamento do pedido", example = "PIX")
+    private FormaPagamento formaPagamento;
 
     @Schema(description = "Nome do cliente", example = "Thon Braga")
     private String nomeCliente;
 
-    @Schema(description = "Lista dos cursos adicionandos", example = "Lógica de Programação")
+    @Schema (description = "Lista dos cursos adicionandos")
     private List<ItensPedidosBuscar> itens;
 
     @Schema(description = "Valor total", example = "99.90")
