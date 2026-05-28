@@ -99,7 +99,7 @@ public class PedidoService {
                 .map(ItensPedidosBuscar::new)
                 .collect(Collectors.toList());
         response.setItens(itensBuscar);
-        
+
         double valorTotal = pedido.getItens().stream()
                 .mapToDouble(ItemPedido::getValorVenda)
                 .sum();
@@ -110,7 +110,9 @@ public class PedidoService {
 
     @Transactional(readOnly = true)
     public List<PedidoBuscar> listarPedidosPorCpfCliente(String cpf) {
-        Cliente cliente = clienteRepository.findByCpf(cpf.trim())
+        String cpfLimpo = cpf.replaceAll("\\D", "");
+
+        Cliente cliente = clienteRepository.findByCpf(cpfLimpo)
                 .orElseThrow(() -> new NaoEncontradoException("Cliente com CPF " + cpf + " não encontrado."));
 
         List<Pedido> pedidos = pedidoRepository.findByClienteId(cliente.getId());
