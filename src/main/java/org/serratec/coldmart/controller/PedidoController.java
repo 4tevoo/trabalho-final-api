@@ -87,11 +87,11 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoEditado);
     }
 
-    @Operation(summary = "Remover pedido")
+    @Operation(summary = "Cancelar pedido")
     @Parameters(value = {
-            @Parameter(name = "id", description = "Remover pelo id do pedido")})
+            @Parameter(name = "id", description = "Cancelar pelo id do pedido")})
     @ApiResponses(value = {
-            @ApiResponse(description = "Curso removido com sucesso", responseCode = "204"),
+            @ApiResponse(description = "Pedido cancelado com sucesso", responseCode = "204"),
             @ApiResponse(description = "Dados informados inválidos", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Dados não encontrados", responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))})
