@@ -127,6 +127,11 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Pedido com ID " + id + " não encontrado."));
 
-        throw new RegraNegocioException("Não é permitido excluir registros de pedidos do sistema. Por favor, utilize a atualização de status para CANCELADO.");
+        if (pedido.getStatus() == StatusPagamento.CANCELADO) {
+            throw new RegraNegocioException("Este pedido já se encontra CANCELADO no sistema.");
+        }
+
+        pedido.setStatus(StatusPagamento.CANCELADO);
+        pedidoRepository.save(pedido);
     }
 }
