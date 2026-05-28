@@ -87,7 +87,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaEditada);
     }
 
-    @Operation(summary = "Remover cliente")
+    @Operation(summary = "Remover categoria")
     @Parameters(value = {
             @Parameter(name = "id", description = "Remover pelo id da categoria")})
     @ApiResponses(value = {
