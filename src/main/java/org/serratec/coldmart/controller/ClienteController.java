@@ -79,7 +79,7 @@ public class ClienteController {
             @ApiResponse(description = "Dados já cadastrados", responseCode = "409", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))})
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteBuscar> editarCliente(@PathVariable UUID id, @RequestBody @Valid ClienteCriar dto) {
+    public ResponseEntity<ClienteBuscar> editarCliente(@PathVariable UUID id, @RequestBody ClienteCriar dto) {
         ClienteBuscar clienteEditado = clienteService.editarCliente(id, dto);
         return ResponseEntity.ok(clienteEditado);
     }

@@ -82,7 +82,7 @@ public class CategoriaController {
             @ApiResponse(description = "Dados já cadastrados", responseCode = "409", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))})
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaBuscar> editarCategoria(@PathVariable UUID id, @RequestBody @Valid CategoriaCriar dto) {
+    public ResponseEntity<CategoriaBuscar> editarCategoria(@PathVariable UUID id, @RequestBody CategoriaCriar dto) {
         CategoriaBuscar categoriaEditada = categoriaService.editarCategoria(id, dto);
         return ResponseEntity.ok(categoriaEditada);
     }

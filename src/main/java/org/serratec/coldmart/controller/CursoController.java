@@ -78,7 +78,7 @@ public class CursoController {
             @ApiResponse(description = "Dados não encontrados", responseCode = "404", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(description = "Erro interno no servidor", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))})
     @PutMapping("/{id}")
-    public ResponseEntity<CursoBuscar> editarCursos(@PathVariable UUID id, @RequestBody @Valid CursoCriar dto) {
+    public ResponseEntity<CursoBuscar> editarCursos(@PathVariable UUID id, @RequestBody CursoCriar dto) {
         CursoBuscar cursoEditado = cursoService.editarCurso(id, dto);
         return ResponseEntity.ok(cursoEditado);
     }
