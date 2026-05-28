@@ -55,26 +55,56 @@ public class ClienteService {
     public ClienteBuscar editarCliente(UUID id, ClienteCriar dto) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Cliente com ID " + id + " não encontrado."));
-        String cpfLimpo = dto.getCpf().replaceAll("\\D", "");
 
-        clienteRepository.findByCpf(cpfLimpo).ifPresent(c -> {
+        preencherDadosCliente(cliente, dto);
+
+        clienteRepository.findByCpf(cliente.getCpf()).ifPresent(c -> {
             if (!c.getId().equals(id)) {
                 throw new EntidadeDuplicadaException("O CPF " + dto.getCpf() + " já está cadastrado em outro usuário.");
             }
         });
 
         boolean emailExisteEmOutro = clienteRepository.findAll().stream()
-                .anyMatch(c -> !c.getId().equals(id) && c.getEmail().equalsIgnoreCase(dto.getEmail()));
+                .anyMatch(c -> !c.getId().equals(id) && c.getEmail().equalsIgnoreCase(cliente.getEmail()));
 
         if (emailExisteEmOutro) {
             throw new EntidadeDuplicadaException("O E-mail " + dto.getEmail() + " já está cadastrado em outro usuário.");
         }
 
-        preencherDadosCliente(cliente, dto);
         Cliente clienteAtualizado = clienteRepository.save(cliente);
         emailService.enviarEmailCadastro(clienteAtualizado.getEmail(), clienteAtualizado.getNomeCompleto(), "Seus dados no ColdMart foram alterados com sucesso!");
 
         return new ClienteBuscar(clienteAtualizado);
+    }
+
+    private void preencherDadosCliente(Cliente cliente, ClienteCriar dto) {
+        cliente.setNomeCompleto(dto.getNomeCompleto() != null ? dto.getNomeCompleto() : cliente.getNomeCompleto());
+        cliente.setEmail(dto.getEmail() != null ? dto.getEmail() : cliente.getEmail());
+        cliente.setTelefone(dto.getTelefone() != null ? dto.getTelefone() : cliente.getTelefone());
+        cliente.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : cliente.getComplemento());
+
+        if (dto.getCpf() != null) {
+            cliente.setCpf(dto.getCpf().replaceAll("\\D", ""));
+        }
+
+        if (dto.getCep() != null && !dto.getCep().equals(cliente.getCep())) {
+            try {
+                ViaCepResponse viaCep = viaCepClient.buscarCep(dto.getCep());
+
+                if (viaCep == null || (viaCep.erro() != null && viaCep.erro())) {
+                    throw new RegraNegocioException("O CEP '" + dto.getCep() + "' é inválido ou não foi encontrado na base de dados.");
+                }
+
+                cliente.setCep(dto.getCep());
+                cliente.setLogradouro(viaCep.logradouro());
+                cliente.setBairro(viaCep.bairro());
+                cliente.setLocalidade(viaCep.localidade());
+                cliente.setUf(viaCep.uf());
+
+            } catch (Exception e) {
+                throw new RegraNegocioException("Falha ao validar o CEP informado. Certifique-se de enviar 8 dígitos numéricos.");
+            }
+        }
     }
 
     @Transactional(readOnly = true)
@@ -82,24 +112,7 @@ public class ClienteService {
         return clienteRepository.findAll().stream()
                 .map(ClienteBuscar::new)
                 .collect(Collectors.toList());
-    }
 
-    private void preencherDadosCliente(Cliente cliente, ClienteCriar dto) {
-        cliente.setNomeCompleto(dto.getNomeCompleto());
-        cliente.setCpf(dto.getCpf().replaceAll("\\D", ""));
-
-        cliente.setEmail(dto.getEmail());
-        cliente.setTelefone(dto.getTelefone());
-        cliente.setCep(dto.getCep());
-        cliente.setComplemento(dto.getComplemento());
-
-        ViaCepResponse viaCep = viaCepClient.buscarCep(dto.getCep());
-        if (viaCep != null) {
-            cliente.setLogradouro(viaCep.logradouro());
-            cliente.setBairro(viaCep.bairro());
-            cliente.setLocalidade(viaCep.localidade());
-            cliente.setUf(viaCep.uf());
-        }
     }
 
     @Transactional(readOnly = true)

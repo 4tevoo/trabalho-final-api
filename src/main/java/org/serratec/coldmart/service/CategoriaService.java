@@ -41,16 +41,15 @@ public class CategoriaService {
     public CategoriaBuscar editarCategoria(UUID id, CategoriaCriar dto) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Categoria com ID " + id + " não encontrada."));
+        categoria.setNome(dto.getNome() != null ? dto.getNome() : categoria.getNome());
+        categoria.setDescricao(dto.getDescricao() != null ? dto.getDescricao() : categoria.getDescricao());
 
-        List<Categoria> categoriasComMesmoNome = categoriaRepository.findByNomeIgnoreCase(dto.getNome().trim());
+        List<Categoria> categoriasComMesmoNome = categoriaRepository.findByNomeIgnoreCase(categoria.getNome().trim());
         for (Categoria c : categoriasComMesmoNome) {
             if (!c.getId().equals(id)) {
-                throw new EntidadeDuplicadaException("Já existe outra categoria cadastrada com o nome '" + dto.getNome() + "'.");
+                throw new EntidadeDuplicadaException("Já existe outra categoria cadastrada com o nome '" + categoria.getNome() + "'.");
             }
         }
-
-        categoria.setNome(dto.getNome());
-        categoria.setDescricao(dto.getDescricao());
 
         Categoria categoriaAtualizada = categoriaRepository.save(categoria);
         return new CategoriaBuscar(categoriaAtualizada);
