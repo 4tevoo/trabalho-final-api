@@ -79,6 +79,7 @@ http://localhost:8080/swagger-ui/index.html
 
 *   **Estevão Viana** - [GitHub Profile](https://github.com/4tevoo)
 *   **Jhonata Raibolt** - [GitHub Profile](https://github.com/jhonataraibolt)
-*   **Ricardo Mello** - [GitHub Profile](https://github.com/josemello26)
+*   **José Ricardo Mello** - [GitHub Profile](https://github.com/josemello26)
+*   **Leilton Braga** - [GitHub Profile](https://github.com/LeiltonBraga)
 *   **Yasmin Verissimo** - [GitHub Profile](https://github.com/yasmimverissimo)
 *   **Yuri Martins** - [GitHub Profile](https://github.com/Y-M-dev)
